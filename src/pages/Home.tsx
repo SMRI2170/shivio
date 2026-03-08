@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import '../App.css';
 
-const logo = `${import.meta.env.BASE_URL}icon.png`;
-const oshikatuIcon = `${import.meta.env.BASE_URL}oshikatuniiki.png`;
-const emotionIcon = `${import.meta.env.BASE_URL}emotiondiary.png`;
+const logo = "icon.png";
+const oshikatuIcon = "oshikatuniiki.png";
+const emotionIcon = "emotiondiary.png";
 
 const apps = [
   { 
