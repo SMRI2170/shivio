@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Smartphone, Play, Github, ArrowUpRight, Globe, Zap, ShieldCheck } from 'lucide-react';
+import { Smartphone, Play, Github, Globe, Zap, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useRef } from 'react';
 import '../App.css';
