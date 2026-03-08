@@ -1,17 +1,18 @@
-import { motion } from 'framer-motion';
-import { Smartphone, Play, Github, LayoutGrid, ArrowRight } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Smartphone, Play, Github, ArrowUpRight, Globe, Zap, ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useRef } from 'react';
 import '../App.css';
 
-const logo = "/icon.png";
-const oshikatuIcon = "/oshikatuniiki.png";
-const emotionIcon = "/emotiondiary.png";
+const logo = `${import.meta.env.BASE_URL}icon.png`;
+const oshikatuIcon = `${import.meta.env.BASE_URL}oshikatuniiki.png`;
+const emotionIcon = `${import.meta.env.BASE_URL}emotiondiary.png`;
 
 const apps = [
   { 
     id: 'oshikatu', 
     name: '推し活日記', 
-    tagline: '想い出を、美しく残す。',
+    tagline: '想い出を、永遠の輝きに。',
     iconImage: oshikatuIcon,
     appStoreUrl: 'https://apps.apple.com/jp/app/%E6%8E%A8%E3%81%97%E6%B4%BB%E6%97%A5%E8%A8%98/id6751962585',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=com.ryosuke.oshikatu&hl=en'
@@ -19,146 +20,152 @@ const apps = [
   { 
     id: 'emotion-diary', 
     name: '感情日記', 
-    tagline: '心の波を、穏やかに。',
+    tagline: '心の波を、美しく描く。',
     iconImage: emotionIcon,
     appStoreUrl: 'https://apps.apple.com/jp/app/emotion-diary-see-the-waves/id6757458952',
     playStoreUrl: 'https://play.google.com/store/apps/details?id=jp.smri.emo0708&hl=en'
   }
 ];
 
-const devLinks = {
-  apple: 'https://apps.apple.com/jp/developer/ryosuke-yoshioka/id1837726385',
-  google: 'https://play.google.com/store/apps/developer?id=Dev+by+Ryosuke&hl=en'
-};
-
 function Home() {
+  const targetRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: targetRef,
+    offset: ["start start", "end start"]
+  });
+
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5], [1, 0.8]);
+  const y = useTransform(scrollYProgress, [0, 0.5], [0, -100]);
+
   return (
-    <div className="app-container">
-      <div className="bg-bubbles">
+    <div className="app-container" ref={targetRef}>
+      {/* Dynamic Background */}
+      <div className="parallax-bg">
         <motion.div 
-          className="bubble" 
-          style={{ width: '400px', height: '400px', top: '-50px', left: '-100px' }}
-          animate={{ x: [0, 30, 0], y: [0, 50, 0] }}
-          transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          className="floating-orb" 
+          style={{ width: '600px', height: '600px', top: '-10%', left: '-10%', background: 'var(--pastel-blue)' }}
+          animate={{ x: [0, 50, 0], y: [0, 100, 0] }}
+          transition={{ duration: 20, repeat: Infinity }}
         />
         <motion.div 
-          className="bubble" 
-          style={{ width: '300px', height: '300px', bottom: '10%', right: '-50px', background: 'var(--pastel-mint)' }}
-          animate={{ x: [0, -40, 0], y: [0, -60, 0] }}
-          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="floating-orb" 
+          style={{ width: '500px', height: '500px', bottom: '10%', right: '-5%', background: 'var(--pastel-mint)' }}
+          animate={{ x: [0, -80, 0], y: [0, -50, 0] }}
+          transition={{ duration: 25, repeat: Infinity }}
         />
       </div>
 
-      <nav className="navbar-pop">
-        <Link to="/" className="logo-pop">
-          <img src={logo} alt="shivio" />
-          <span>shivio</span>
+      <nav className="navbar-rich">
+        <Link to="/" className="nav-logo" style={{ textDecoration: 'none' }}>
+          <img src={logo} alt="shivio" style={{ borderRadius: '8px', width: '32px', height: '32px' }} />
+          <span style={{ fontFamily: 'var(--font-pop)', fontWeight: 700, color: 'var(--navy-deep)', marginLeft: '8px' }}>shivio</span>
         </Link>
-        <div style={{ display: 'flex', gap: '24px', alignItems: 'center' }}>
-          <a href="https://github.com/ryosuke-404" target="_blank" style={{ color: 'var(--navy)' }}>
-            <Github size={22} />
-          </a>
+        <div className="nav-links-rich">
+          <a href="#projects" className="nav-link-item">Products</a>
+          <a href="#mission" className="nav-link-item">Mission</a>
+          <a href="https://github.com/ryosuke-404" target="_blank" rel="noopener noreferrer" className="nav-link-item"><Github size={20} /></a>
         </div>
       </nav>
 
-      <header className="hero">
-        <motion.div 
-          className="hero-visual"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 100 }}
-        >
-          <img src={logo} className="hero-img-pop" alt="shivio logo" />
-        </motion.div>
-        <motion.h1
-          initial={{ y: 30, opacity: 0 }}
+      <motion.header className="hero-rich" style={{ opacity, scale, y }}>
+        <div className="hero-tag">Nature x Technology</div>
+        <motion.h1 
+          className="hero-title-rich"
+          initial={{ y: 60, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.8 }}
+          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
         >
-          shivio.
+          Beyond<br/>Excellence.
         </motion.h1>
-        <motion.p
+        <motion.p 
+          className="hero-desc-rich"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.4, duration: 1 }}
+          transition={{ delay: 0.5, duration: 1 }}
         >
-          琵琶湖のほとりから生まれる、<br/>
-          心地よくて、ちょっとわくわくする技術。
+          琵琶湖のほとり、静寂の中から生まれる。<br/>
+          世界を少しだけ驚かせる、洗練されたデジタルの波。
         </motion.p>
-      </header>
+      </motion.header>
 
-      <main className="section-pop">
+      <section id="projects" className="app-section-rich">
+        <div className="section-header-rich">
+          <motion.h2 
+            className="section-title-rich"
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+          >
+            Our Ecosystem
+          </motion.h2>
+        </div>
+
         <div className="app-grid">
-          {apps.map((app) => (
+          {apps.map((app, index) => (
             <motion.div 
               key={app.id} 
-              className="app-card-organic"
-              initial={{ y: 40, opacity: 0 }}
-              whileInView={{ y: 0, opacity: 1 }}
+              className="app-card-luxe"
+              initial={{ opacity: 0, y: 50 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
+              transition={{ delay: index * 0.2, duration: 0.8 }}
             >
-              <img src={app.iconImage} className="app-icon-large" alt={app.name} />
-              <h2 className="app-name-luxe">{app.name}</h2>
-              <p className="app-tagline-luxe">{app.tagline}</p>
+              <motion.img 
+                src={app.iconImage} 
+                className="app-icon-rich" 
+                alt={app.name}
+                whileHover={{ rotate: [0, -5, 5, 0], scale: 1.1 }}
+              />
+              <h3 style={{ fontFamily: 'var(--font-pop)', fontSize: '36px', color: 'var(--navy-deep)', marginBottom: '16px' }}>
+                {app.name}
+              </h3>
+              <p style={{ fontSize: '18px', fontWeight: 600, color: 'var(--navy)', opacity: 0.5, marginBottom: '56px' }}>
+                {app.tagline}
+              </p>
               
               <div className="store-links-luxe">
-                <a href={app.appStoreUrl} target="_blank" rel="noopener noreferrer" className="btn-store-pop apple">
-                  <Smartphone size={18} /> App Store
+                <a href={app.appStoreUrl} target="_blank" rel="noopener noreferrer" className="btn-store-rich apple">
+                  <Smartphone size={20} /> App Store
                 </a>
-                <a href={app.playStoreUrl} target="_blank" rel="noopener noreferrer" className="btn-store-pop google">
-                  <Play size={18} /> Play Store
+                <a href={app.playStoreUrl} target="_blank" rel="noopener noreferrer" className="btn-store-rich google">
+                  <Play size={20} /> Play Store
                 </a>
               </div>
             </motion.div>
           ))}
         </div>
+      </section>
 
-        <div style={{ marginTop: '120px', textAlign: 'center' }}>
-          <div className="portfolio-header">
-            <LayoutGrid size={20} />
-            <span>ALL PRODUCTS</span>
+      <section id="mission" className="feature-box">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          whileInView={{ opacity: 1, scale: 1 }}
+          viewport={{ once: true }}
+          transition={{ duration: 1 }}
+        >
+          <span style={{ fontSize: '12px', fontWeight: 800, letterSpacing: '4px', opacity: 0.5 }}>OUR MISSION</span>
+          <h2 style={{ marginTop: '24px' }}>Simple, Minimal, Beautiful.</h2>
+          <p style={{ fontSize: '20px', maxWidth: '700px', margin: '32px auto 64px', opacity: 0.7, lineHeight: 1.8 }}>
+            私たちは「複雑さ」というノイズを取り除き、<br/>
+            人生の豊かな瞬間をより鮮やかに彩るための道具を作ります。
+          </p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '48px' }}>
+            <motion.div whileHover={{ y: -10, color: 'var(--light-blue)' }}><Zap size={40} /></motion.div>
+            <motion.div whileHover={{ y: -10, color: 'var(--aqua)' }}><Globe size={40} /></motion.div>
+            <motion.div whileHover={{ y: -10, color: 'var(--light-blue)' }}><ShieldCheck size={40} /></motion.div>
           </div>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '20px', flexWrap: 'wrap' }}>
-            <motion.a 
-              href={devLinks.apple} 
-              target="_blank" 
-              className="btn-store-pop" 
-              style={{ width: 'auto', padding: '16px 32px', background: 'var(--white)', border: '1px solid var(--pastel-blue)', color: 'var(--navy)' }}
-              whileHover={{ scale: 1.05, background: 'var(--pastel-blue)' }}
-            >
-              App Store Explorer <ArrowRight size={18} />
-            </motion.a>
-            <motion.a 
-              href={devLinks.google} 
-              target="_blank" 
-              className="btn-store-pop" 
-              style={{ width: 'auto', padding: '16px 32px', background: 'var(--white)', border: '1px solid var(--pastel-blue)', color: 'var(--navy)' }}
-              whileHover={{ scale: 1.05, background: 'var(--pastel-blue)' }}
-            >
-              Google Play Portfolio <ArrowRight size={18} />
-            </motion.a>
-          </div>
-        </div>
-      </main>
-
-      <section className="cta-pop">
-        <h2 style={{ fontFamily: 'var(--font-pop)', fontSize: '42px', color: 'var(--navy)', marginBottom: '24px' }}>
-          Simple & Happy.
-        </h2>
-        <p style={{ color: 'var(--navy-soft)', maxWidth: '600px', margin: '0 auto', fontWeight: 600, fontSize: '20px', opacity: 0.7 }}>
-          琵琶湖のほとりから、あなたの日常を少しだけ楽しく、<br/>
-          そしてシンプルにするプロダクトを。
-        </p>
+        </motion.div>
       </section>
 
       <footer>
-        <div style={{ fontFamily: 'var(--font-pop)', fontSize: '24px', color: 'var(--navy)', opacity: 0.2 }}>shivio.</div>
-        <div className="footer-links-luxe" style={{ marginTop: '32px' }}>
-          <Link to="/terms" className="footer-link">Terms of Service</Link>
-          <Link to="/privacy" className="footer-link">Privacy Policy</Link>
+        <div className="footer-logo-rich">shivio.</div>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: '32px', marginBottom: '48px' }}>
+          <Link to="/terms" style={{ color: 'var(--navy-deep)', textDecoration: 'none', fontWeight: 700, fontSize: '14px', opacity: 0.6 }}>Terms</Link>
+          <Link to="/privacy" style={{ color: 'var(--navy-deep)', textDecoration: 'none', fontWeight: 700, fontSize: '14px', opacity: 0.6 }}>Privacy</Link>
         </div>
-        <p style={{ marginTop: '48px', fontSize: '12px', fontWeight: 800, opacity: 0.2, color: 'var(--navy)', letterSpacing: '1px' }}>
-          © 2026 SHIGA IO / SHIVIO BY RYOSUKE YOSHIOKA
+        <p style={{ fontSize: '12px', fontWeight: 800, color: 'var(--navy-deep)', opacity: 0.2, letterSpacing: '4px' }}>
+          © 2026 SHIGA IO / SHIVIO COLLECTION
         </p>
       </footer>
     </div>

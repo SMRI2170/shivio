@@ -5,7 +5,7 @@ import Privacy from './pages/Privacy';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/shivio">
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/terms" element={<Terms />} />
